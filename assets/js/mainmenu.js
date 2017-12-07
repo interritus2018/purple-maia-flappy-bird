@@ -28,7 +28,7 @@ var mainMenuState = {
     },
 
     startGame: function() {
-       // game.state.start('play');
+       game.state.start('play');
     }
 
 };
