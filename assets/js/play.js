@@ -11,10 +11,10 @@ var playState = {
         game.scale.pageAlignHorizontally = true;
         game.scale.pageAlignVertically = true;
         
-        game.stage.backgroundColor='#8185d5';
+        game.stage.backgroundColor='#1235d5';
         
         //pipes, banana
-        game.load.image('bird', 'assets/images/banana.png');
+        game.load.image('bird', 'assets/images/ZKeLqP1dc7-4.png');
         game.load.image('pipe', 'assets/images/pipe.png');
         
         //sound
@@ -68,5 +68,66 @@ var playState = {
         if (this.bird.angle < 20){
             this.bird.angle += 1;
         }
+    },
+    
+    jump: function() {
+        // if player dead, can't jump
+        if (this.bird.alive == false){
+            return;
+        }
+        
+        this.bird.body.velocity.y = -350;
+        
+        //jump animation
+        game.add.tween(this.bird).to({angle: -20}, 100).start();
+        
+        //play sound
+        this.jumpSound.play();
+    },
+    
+    hitPipe: function() {
+        //if player already hit a pipe, nothing to do
+        if (this.bird.alive == false) {
+            return;
+        }
+        
+        //set alive property to false
+        this.bird.alive = false;
+        
+        //prevent new pipes from appearing
+        game.time.events.remove(this.timer);
+        
+        //go through all pipes and stop their movement
+        this.pipes.forEach(function(p) {
+            p.body.velocity.x=0;
+        }, this);
+    },
+    
+    restartGame: function() {
+        //displays restart menu
+        game.state.start('menu')
+    },
+    
+    addPipe: function(x, y) {
+        var pipe = game.add.sprite(x, y, 'pipe');
+        this.pipes.add(pipe);
+        game.physics.arcade.enable(pipe);//enable physics
+        
+        pipe.body.velocity.x = -200;
+        pipe.checkWorldBounds = true;
+        pipe.outOfBoundsKill = true;
+    },
+    
+    addRowOfPipes: function() {
+        var hole = Math.floor(Math.random()*5)+1;
+        
+        for (var i = 0; i < 10; i++) {
+            if (i  != hole && i != hole+1) {
+                this.addPipe(400, i*65);
+            }
+        }
+        
+        this.score += 1;
+        this.labelScore.text = this.score;
     }
 };

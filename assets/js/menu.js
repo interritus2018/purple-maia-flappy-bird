@@ -6,7 +6,7 @@ var menuState = {
     
     
     preload: function() { 
-        game.load.spritesheet('startBtn','assets/images/retry_btn.png',193,71);
+        game.load.spritesheet('button','assets/images/retry_btn.png',193,71);
         
         game.scale.pageAlignHorizontally = true;
         game.scale.pageAlignVertically = true;
